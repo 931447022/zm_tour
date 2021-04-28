@@ -43,6 +43,20 @@ export default {
     };
   },
   methods: {
+    //得到用户userid
+    getUserId() {
+      let t = this;
+      var userphone = uni.getStorageSync("phone");
+      console.log(userphone);
+      let data = { userPhone: userphone };
+      t.$u.ajax(t.$api.getUserId, data, function (res) {
+        // console.log(res, "搜索接口返回数据");
+        let user_id = res[0].id;
+        t.user_id = user_id
+        uni.setStorageSync("user_id", user_id);
+        // console.log(user_id);
+      });
+    },
     //验证码发送请求
     getyzm(phone) {
       let t = this,
@@ -119,6 +133,7 @@ export default {
               if (res.userInfo) {
                 uni.setStorageSync("userInfo", res.userInfo);
               }
+              t.getUserId()
               uni.switchTab({
                 url: "/pages/index/index",
               });

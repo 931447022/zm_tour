@@ -227,6 +227,7 @@ export default {
 
   onLoad: function (options) {
     let t = this;
+    t.getuserInfo();
     if (options.isShowComments) {
       t.isShowComments = options.isShowComments;
     }
@@ -234,13 +235,13 @@ export default {
     t.getAjax();
     t.getHotel();
     t.getFood();
+   
     t.user_id = uni.getStorageSync("user_id");
     if (t.user_id) {
       t.getCollect();
     }
     t.getuserfooter();
     t.getComments();
-    t.getuserInfo();
   },
   filters: {
     // 时间戳处理
@@ -273,6 +274,20 @@ export default {
     };
   },
   methods: {
+    //得到用户userid
+    getUserId() {
+      let t = this;
+      var userphone = uni.getStorageSync("phone");
+      console.log(userphone);
+      let data = { userPhone: userphone };
+      t.$u.ajax(t.$api.getUserId, data, function (res) {
+        // console.log(res, "搜索接口返回数据");
+        let user_id = res[0].id;
+        t.user_id = user_id
+        uni.setStorageSync("user_id", user_id);
+        // console.log(user_id);
+      });
+    },
     // 打开消息提示框
     openpop() {
       // 通过组件定义的ref调用uni-popup方法
@@ -293,6 +308,9 @@ export default {
       // console.log(t.userInfo);
       t.user_head = t.userInfo.avatarUrl;
       t.userName = t.userInfo.nickName;
+      if(t.userInfo){
+        t.getUserId();
+      }
     },
     //上传评论
     uploadcomments() {
@@ -301,14 +319,15 @@ export default {
         user_id = t.user_id,
         user_head = t.user_head,
         userName = t.userName,
-        article = t.article,
-        data = {
-          good_id: good_id,
-          user_id: user_id,
-          user_head: user_head,
-          user_name: userName,
-          article: article,
-        };
+        article = t.article;
+      let data = {
+        good_id: good_id,
+        user_id: user_id,
+        user_head: user_head,
+        user_name: userName,
+        article: article,
+      };
+      console.log(data);
       t.$u.ajaxP(t.$api.submitFeedback, data, function (res) {
         console.log(res);
         if (res.flag == t.flag) {

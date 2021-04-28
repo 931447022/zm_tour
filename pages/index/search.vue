@@ -77,6 +77,7 @@ export default {
       let t = this,
       cleartextArr = [];
       t.gettextArr = [];
+      t.text = ''
       uni.setStorage({
         key: "textArr",
         data: cleartextArr,
