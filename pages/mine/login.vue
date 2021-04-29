@@ -6,6 +6,7 @@
       </view>
     </view>
     <view class="content">
+      <!-- 测试 -->
       <!-- 手机号内容 -->
       <view class="sj">
         <image src="../../static/icon/sj.png" mode="" />
